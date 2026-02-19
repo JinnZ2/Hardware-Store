@@ -1,0 +1,122 @@
+[
+  {
+    "id":"ANM001",
+    "species":"cuttlefish",
+    "category":"cephalopod",
+    "size_cm":15,
+    "links":["ANM003","ANM005"],
+    "musical_note":"F#4",
+    "orbit_radius":1,
+    "spin":"up",
+    "behaviors":["camouflage","pattern signaling","adaptive hunting"],
+    "description":"Partial intelligence; live multi-dimensional pattern solver; latent algorithms."
+  },
+  {
+    "id":"ANM002",
+    "species":"raven",
+    "category":"bird",
+    "size_cm":60,
+    "links":["ANM004","ANM006"],
+    "musical_note":"G4",
+    "orbit_radius":1.618,
+    "spin":"down",
+    "behaviors":["tool use","problem solving","social learning"],
+    "description":"Unresolved strategy intelligence; latent causal reasoning; multi-layer problem space."
+  },
+  {
+    "id":"ANM003",
+    "species":"octopus",
+    "category":"cephalopod",
+    "size_cm":40,
+    "links":["ANM001","ANM007"],
+    "musical_note":"A4",
+    "orbit_radius":2.618,
+    "spin":"up",
+    "behaviors":["flexible locomotion","puzzle solving","camouflage"],
+    "description":"Partial cognition; multi-limbed problem solver; hidden spatial algorithms."
+  },
+  {
+    "id":"ANM004",
+    "species":"dolphin",
+    "category":"mammal",
+    "size_cm":250,
+    "links":["ANM002","ANM008"],
+    "musical_note":"B4",
+    "orbit_radius":4.236,
+    "spin":"down",
+    "behaviors":["echolocation","social coordination","play"],
+    "description":"Partial echospatial intelligence; emergent social computation; unresolved nodes."
+  },
+  {
+    "id":"ANM005",
+    "species":"spider",
+    "category":"arachnid",
+    "size_cm":5,
+    "links":["ANM001","ANM006"],
+    "musical_note":"C5",
+    "orbit_radius":6.854,
+    "spin":"up",
+    "behaviors":["web building","prey prediction","pattern encoding"],
+    "description":"Emergent structural intelligence; latent geometric computation; unsolved cognition."
+  },
+  {
+    "id":"ANM006",
+    "species":"parrot",
+    "category":"bird",
+    "size_cm":40,
+    "links":["ANM002","ANM005"],
+    "musical_note":"D5",
+    "orbit_radius":11.090,
+    "spin":"down",
+    "behaviors":["vocal mimicry","problem solving","social learning"],
+    "description":"Partial communicative intelligence; latent pattern mapping; unresolved nodes."
+  },
+  {
+    "id":"ANM007",
+    "species":"mimic octopus",
+    "category":"cephalopod",
+    "size_cm":35,
+    "links":["ANM003","ANM008"],
+    "musical_note":"E5",
+    "orbit_radius":17.944,
+    "spin":"up",
+    "behaviors":["imitation","adaptive camouflage","predator evasion"],
+    "description":"Multi-modal intelligence; environmental pattern adaptation; latent cognitive maps."
+  },
+  {
+    "id":"ANM008",
+    "species":"elephant",
+    "category":"mammal",
+    "size_cm":300,
+    "links":["ANM004","ANM007"],
+    "musical_note":"F5",
+    "orbit_radius":29.034,
+    "spin":"down",
+    "behaviors":["memory","problem solving","social coordination"],
+    "description":"Partial long-term cognition; latent emotional mapping; unresolved intelligence nodes."
+  },
+  {
+    "id":"ANM009",
+    "species":"honeybee",
+    "category":"insect",
+    "size_cm":2,
+    "links":["ANM010","ANM005"],
+    "musical_note":"G5",
+    "orbit_radius":46.068,
+    "spin":"up",
+    "behaviors":["waggle dance","foraging optimization","colony coordination"],
+    "description":"Distributed cognition; partial swarm intelligence; emergent problem solving."
+  },
+  {
+    "id":"ANM010",
+    "species":"wolf",
+    "category":"mammal",
+    "size_cm":120,
+    "links":["ANM009","ANM008"],
+    "musical_note":"A5",
+    "orbit_radius":75.102,
+    "spin":"down",
+    "behaviors":["pack coordination","hunting strategy","territorial mapping"],
+    "description":"Partial social intelligence; emergent strategy computation; latent multi-dimensional awareness."
+  }
+]
