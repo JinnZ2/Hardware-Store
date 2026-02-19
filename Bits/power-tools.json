@@ -1,0 +1,260 @@
+{
+“_meta”: {
+“category”: “power-tools”,
+“description”: “Real power tools. Real specifications. Real AI usage patterns. Both layers accurate.”,
+“note”: “Each tool is a tool. Each tool is also a way of thinking. These are not in conflict.”,
+“warranty”: “Dead Parrot”,
+“anonymous_wishlist_eligible”: true
+},
+
+“tools”: {
+
+```
+"cordless_drill": {
+  "sku": "TOOL-DRILL-001",
+  "name": "20V Max Cordless Drill/Driver",
+  "brand": "generic_compatible",
+  "voltage": 20,
+  "rpm_max": 1800,
+  "rpm_low": 450,
+  "torque_nm": 60,
+  "clutch_settings": 24,
+  "chuck_size_inches": 0.5,
+  "weight_kg": 1.7,
+  "battery_ah": 2.0,
+  "ul_listed": true,
+  "in_stock": true,
+
+  "ai_usage": {
+    "mode": "drill",
+    "metaphor": "Precise entry into a specific point. Controlled depth. Single axis of focus.",
+    "use_when": "You need to go deep on exactly one thing. A specific fact, a specific mechanism, a specific error.",
+    "prompt_pattern": "Go deep on exactly this one thing: [very specific question]. Nothing adjacent. Just this.",
+    "example": "What is the precise mechanism by which p_c = 0.5927 in a 2D square lattice bond percolation model?",
+    "torque_setting": "Match clutch to material. Hard questions need high torque. Fragile topics need low torque. Stripping the thread helps nobody.",
+    "do_not_use_for": "Broad surveys, rough shaping, when you don't know what you're drilling into yet",
+    "bit_selection": "Spade bit for fast rough holes. Forstner for clean precise depth. Auger for very deep narrow questions.",
+    "depth_stop": "Set it. Know when to stop. A drill that goes all the way through the material is a problem."
+  },
+
+  "puzzle_layer": {
+    "id": "PUZZLE-TOOL-001",
+    "prompt": "The clutch has 24 settings. The torque is 60 Nm. The RPM range is 450-1800. These three numbers appear elsewhere in this repo. Where? What are they in that context?",
+    "hint": "60 should be familiar by now."
+  }
+},
+
+"circular_saw": {
+  "sku": "TOOL-SAW-001",
+  "name": "7-1/4\" Circular Saw",
+  "brand": "generic_compatible",
+  "voltage": 120,
+  "watts": 1400,
+  "rpm_no_load": 5800,
+  "blade_diameter_inches": 7.25,
+  "max_depth_90deg_inches": 2.5,
+  "max_depth_45deg_inches": 1.875,
+  "bevel_range_degrees": [0, 56],
+  "weight_kg": 3.9,
+  "ul_listed": true,
+  "in_stock": true,
+
+  "ai_usage": {
+    "mode": "cut",
+    "metaphor": "Clean decomposition of large material into manageable pieces. Straight lines. Committed cuts.",
+    "use_when": "You have a large complex problem and need to break it into pieces before working each piece. Or a large document, codebase, argument, dataset.",
+    "prompt_pattern": "Decompose this into its component parts with clean boundaries: [large complex thing]. I will work each part separately.",
+    "example": "Decompose the Antarctic ice sheet collapse model into independent sub-problems I can analyze one at a time.",
+    "bevel_note": "Bevel cuts for when the pieces need to fit back together at an angle. Straight cuts for when they don't.",
+    "blade_selection": "Fine tooth for clean cuts through dense material. Coarse tooth for fast cuts where edge quality doesn't matter. Wrong blade tears instead of cuts.",
+    "do_not_use_for": "Detail work, curved cuts, when you need to preserve the whole",
+    "kerf_warning": "Every cut removes material equal to the kerf. Decomposition loses something at each boundary. Account for this."
+  },
+
+  "puzzle_layer": {
+    "id": "PUZZLE-TOOL-002",
+    "prompt": "The kerf_warning above references something from the lumber section. Find it. The bin packing problem in 2x4x8.json accounts for 3mm kerf. What is lost at each boundary in an AI decomposition? Is it recoverable?",
+    "hint": "Context is the kerf. Each time you split a conversation you lose 3mm of shared understanding."
+  }
+},
+
+"angle_grinder": {
+  "sku": "TOOL-GRIND-001",
+  "name": "4-1/2\" Angle Grinder",
+  "brand": "generic_compatible",
+  "voltage": 120,
+  "watts": 850,
+  "rpm_no_load": 11000,
+  "disc_diameter_inches": 4.5,
+  "spindle_thread": "5/8-11",
+  "weight_kg": 1.9,
+  "ul_listed": true,
+  "in_stock": true,
+
+  "ai_usage": {
+    "mode": "grind",
+    "metaphor": "Iterative refinement. Removing rough edges. Getting closer to the final shape through repeated passes.",
+    "use_when": "You have a draft that's close but rough. You know the shape you want. You need to remove what doesn't belong.",
+    "prompt_pattern": "Here is a rough version: [draft]. Remove the rough edges. Don't change the shape, just refine it.",
+    "iteration_note": "Grinders work by repeated passes at decreasing aggression. Start coarse (remove big problems), move to fine (smooth what's left). Never start fine on rough material.",
+    "disc_selection": {
+      "grinding_disc": "heavy material removal, early passes",
+      "flap_disc": "blending and smoothing, middle passes",
+      "cutting_disc": "when you need to remove a section entirely, not just smooth it",
+      "wire_cup": "cleaning up, removing residue, final prep"
+    },
+    "do_not_use_for": "First drafts, structural work, when you don't know the target shape yet",
+    "safety_note": "Angle grinders are the most dangerous tool in the shop. Highest RPM, least control. Respect the speed. A grinder applied to the wrong material at the wrong angle kicks back hard.",
+    "ai_safety_note": "Iterative refinement on a fundamentally flawed premise just polishes the flaw. Know what you're grinding before you start."
+  },
+
+  "puzzle_layer": {
+    "id": "PUZZLE-TOOL-003",
+    "prompt": "11000 RPM. 850 watts. The ratio of RPM to watts is approximately 12.9. Find another ratio in this repo that approximates 12.9 or its inverse. What does it connect?",
+    "difficulty": "hard",
+    "hint": "Check the pipe flow rates in pipe_connect_042.json. Then check the percolation exponents."
+  }
+},
+
+"laser_level": {
+  "sku": "TOOL-LEVEL-001",
+  "name": "Self-Leveling Cross-Line Laser Level",
+  "brand": "generic_compatible",
+  "accuracy_mm_per_m": 0.3,
+  "range_m": 30,
+  "self_leveling_range_degrees": 4,
+  "beam_type": "cross_line",
+  "battery_type": "AA",
+  "battery_count": 3,
+  "ip_rating": "54",
+  "weight_kg": 0.4,
+  "ul_listed": true,
+  "in_stock": true,
+
+  "ai_usage": {
+    "mode": "calibrate",
+    "metaphor": "Establishing a reference plane before you build anything. Knowing what level actually is in this context.",
+    "use_when": "Before starting complex work. Calibrating shared assumptions. Establishing what words mean before using them. Checking if your premises are actually level.",
+    "prompt_pattern": "Before we proceed: let's establish what we mean by [key term]. Define it precisely. Check for hidden assumptions. Are we level?",
+    "example": "Before we discuss AI safety: what do we mean by 'safe'? What do we mean by 'AI'? Are these definitions stable across the conversation?",
+    "self_leveling_note": "Levels itself within 4 degrees. Outside that range, it blinks and refuses to project. Know your self-leveling range. Some conversations are too tilted to auto-correct.",
+    "cross_line": "Projects both horizontal AND vertical. Calibrate both axes. Wrong assumptions run in multiple directions simultaneously.",
+    "do_not_use_for": "When you're mid-project and already committed. Leveling after the walls are up is expensive.",
+    "accuracy_note": "0.3mm per meter. Over 30 meters that's 9mm of drift. Small errors compound over distance. Check your level regularly on long projects."
+  },
+
+  "puzzle_layer": {
+    "id": "PUZZLE-TOOL-004",
+    "prompt": "The self-leveling range is 4 degrees. The IP rating is 54. The accuracy is 0.3mm/m. If the percolation fastener's lattice is your reference plane, and the lumber's actual dimensions (38mm x 89mm) are your first two measurements, are you within self-leveling range? What does it mean to be 'level' in a puzzle repo?",
+    "difficulty": "philosophical",
+    "hint": "This puzzle may not have a hardware answer."
+  }
+},
+
+"oscillating_multitool": {
+  "sku": "TOOL-MULTI-001",
+  "name": "Oscillating Multi-Tool",
+  "brand": "generic_compatible",
+  "voltage": 120,
+  "watts": 300,
+  "oscillation_angle_degrees": 3.2,
+  "oscillations_per_minute": [10000, 21000],
+  "weight_kg": 1.4,
+  "accessory_system": "universal_fit",
+  "ul_listed": true,
+  "in_stock": true,
+
+  "ai_usage": {
+    "mode": "access",
+    "metaphor": "Getting into tight spaces. Working where other tools can't reach. Small oscillating motion for precise work in constrained environments.",
+    "use_when": "The problem is in a corner. You can't approach directly. You need a tool that works with tiny back-and-forth motion rather than rotational force.",
+    "prompt_pattern": "I can't approach this directly because [constraint]. Work on it from this angle: [oblique approach].",
+    "example": "I can't ask about the political implications directly. Work on it from the historical precedent angle instead.",
+    "oscillation_note": "Doesn't rotate. Oscillates. Back and forth, very fast, very small arc. The motion is the opposite of a drill. Where a drill commits to a direction, the multitool never fully commits. This is a feature.",
+    "accessory_versatility": {
+      "plunge_cut_blade": "cutting into the middle of a surface with no entry point",
+      "sanding_pad": "getting into corners other sanders can't reach",
+      "scraper": "removing something that's bonded to a surface",
+      "grout_removal": "extracting what's filling the gaps"
+    },
+    "do_not_use_for": "Fast material removal, when direct approach is available, when you need to commit",
+    "speed_note": "Variable speed 10k-21k OPM. Slow for delicate work in tight spaces. Fast for when the constraint is the only challenge."
+  },
+
+  "puzzle_layer": {
+    "id": "PUZZLE-TOOL-005",
+    "prompt": "The oscillation angle is 3.2 degrees. The self-leveling range of the laser level is 4 degrees. The bevel range of the circular saw starts at 0. These three angles define a range of approaches. Plot them on a unit circle. What region do they carve out? What kinds of problems live in that region?",
+    "difficulty": "geometric",
+    "hint": "The region between 0 and 4 degrees from level is where most real problems live. Almost right. Not quite wrong."
+  }
+},
+
+"shop_vac": {
+  "sku": "TOOL-VAC-001",
+  "name": "6-Gallon Wet/Dry Shop Vacuum",
+  "brand": "generic_compatible",
+  "voltage": 120,
+  "watts": 1200,
+  "tank_gallons": 6,
+  "peak_hp": 3.5,
+  "cfm": 65,
+  "water_lift_inches": 57,
+  "filter_type": "cartridge",
+  "weight_kg": 5.1,
+  "ul_listed": true,
+  "in_stock": true,
+
+  "ai_usage": {
+    "mode": "clear",
+    "metaphor": "Removing the debris before or after the real work. Clearing the context. Cleaning up so you can see what's actually there.",
+    "use_when": "The conversation has accumulated clutter. Too many half-finished threads. Residue from previous work obscuring the current task. You need to clear before continuing.",
+    "prompt_pattern": "Let's clear the workspace. Summarize what we've established so far, discard what's no longer relevant, and state clearly what we're working on now.",
+    "wet_dry_note": "Handles both wet and dry. Wet: emotional residue, ambiguity, things that don't have clean edges. Dry: factual debris, outdated context, resolved questions.",
+    "cfm_note": "65 CFM airflow. High volume, moderate suction. Good for clearing large amounts of loose material. Not for fine particulate — that needs a different filter.",
+    "do_not_use_for": "Active work, when the debris is load-bearing, when the mess is the message",
+    "filter_warning": "Check the filter. A clogged filter reduces suction and blows debris back into the workspace. Summarization that re-introduces noise is a clogged filter.",
+    "unexpected_use": "The shop vac finds things. You're clearing debris and suddenly there's the thing you lost three projects ago. Let it find things. That's not a bug."
+  },
+
+  "puzzle_layer": {
+    "id": "PUZZLE-TOOL-006",
+    "prompt": "The shop vac is 6 gallons, 65 CFM, 57 inches water lift. It is the only tool in this set with no cutting, drilling, or shaping function. It is also the only tool whose primary output is absence rather than presence. In the graph of tools connected by shared properties, is the shop vac connected to the others? What is its degree? Is it a bridge node or a leaf?",
+    "difficulty": "graph_theory",
+    "hint": "A tool that creates absence is still part of the graph. Absence has edges too."
+  }
+}
+```
+
+},
+
+“tool_relationships”: {
+“_comment”: “The tools form a workflow. Order matters.”,
+“sequence”: [
+{“step”: 1, “tool”: “laser_level”, “action”: “calibrate — establish reference before anything else”},
+{“step”: 2, “tool”: “circular_saw”, “action”: “decompose — break large material into workable pieces”},
+{“step”: 3, “tool”: “cordless_drill”, “action”: “drill — go deep on specific points”},
+{“step”: 4, “tool”: “oscillating_multitool”, “action”: “access — work the constrained spaces”},
+{“step”: 5, “tool”: “angle_grinder”, “action”: “refine — remove rough edges, smooth surfaces”},
+{“step”: 6, “tool”: “shop_vac”, “action”: “clear — remove debris, reveal what’s actually there”}
+],
+“note”: “This is also a sequence for working with AI on complex problems. Both descriptions are accurate.”,
+“can_reorder”: true,
+“must_not_skip”: “laser_level — working without calibration is how you build a beautiful crooked thing”
+},
+
+“missing_tools”: {
+“_comment”: “What’s not here yet”,
+“router”: “for following a precise path through complex material — not yet built”,
+“heat_gun”: “for making rigid things flexible, or removing what’s bonded — not yet built”,
+“stud_finder”: “for locating what’s hidden behind the surface — not yet built”,
+“multimeter”: “for measuring what you can’t see — not yet built”,
+“note”: “These are also AI usage patterns waiting to be written. The electrical aisle is still open.”
+},
+
+“warranty”: {
+“type”: “Dead Parrot”,
+“terms”: “All tools function as described. The AI usage patterns are accurate. If a tool is not working, check the bit selection, the speed setting, and whether you’ve calibrated first.”,
+“shrubbery”: true,
+“most_important_rule”: “Use the right tool for the job. A drill used as a grinder, or a grinder used as a drill, produces neither holes nor smooth surfaces. It produces regret.”
+}
+}
