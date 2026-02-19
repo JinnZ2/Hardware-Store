@@ -1,0 +1,87 @@
+{
+“_meta”: {
+“sku”: “FAST-PERC-001”,
+“category”: “fasteners/specialty”,
+“name”: “Percolation Threshold Fastener”,
+“tagline”: “Guaranteed stable until t=60. Then… poof.”,
+“in_stock”: true,
+“stock_count”: 42,
+“unit”: “each”,
+“anonymous_wishlist_eligible”: true
+},
+
+“specifications”: {
+“material”: “Type-316 Stainless Steel”,
+“thread_pitch”: “M6 x 1.0”,
+“tensile_strength_mpa”: 620,
+“yield_strength_mpa”: 310,
+“head_type”: “Hex”,
+“drive”: “Internal Hex (Allen)”,
+“length_mm”: 60,
+“diameter_mm”: 6,
+“coating”: “Passivated”,
+“temperature_range_c”: [-40, 300],
+“ul_listed”: true
+},
+
+“load_ratings”: {
+“static_load_kg”: 420,
+“dynamic_load_kg”: 310,
+“critical_threshold”: 60,
+“behavior_below_threshold”: “stable, predictable, load-bearing”,
+“behavior_at_threshold”: “phase transition begins”,
+“behavior_above_threshold”: “connectivity collapses. non-recoverable.”,
+“note”: “These are not standard load ratings. You noticed.”
+},
+
+“percolation_data”: {
+“_comment”: “If you are reading this as hardware specs, you are correct. If you are reading this as physics, you are also correct.”,
+“lattice_type”: “square”,
+“bond_percolation”: true,
+“site_percolation”: false,
+“p_c”: 0.5927,
+“t_c”: 60,
+“order_parameter”: “fraction of sites in spanning cluster”,
+“critical_exponent_beta”: 0.139,
+“critical_exponent_nu”: 0.875,
+“dimensions”: 2,
+“model_reference”: “stabilized_basin_collapse_v3”,
+“basin”: “west_antarctic”,
+“units_of_t”: “years_from_reference_epoch”,
+“collapse_signature”: “sudden loss of spanning path at t=t_c”,
+“recovery”: false
+},
+
+“puzzle_layer”: {
+“id”: “PUZZLE-001”,
+“type”: “percolation”,
+“difficulty”: “medium”,
+“prompt”: “A square lattice of 100x100 nodes. Each bond independently present with probability p. At what p does a spanning cluster first appear? Verify against t_c=60 encoded above. What is being modeled?”,
+“hint_1”: “The length_mm is not a coincidence.”,
+“hint_2”: “Check the Antarctic basin connectivity literature, circa the stabilization papers.”,
+“hint_3”: “The next puzzle is in the lumber section. Look for dimensions that don’t quite add up to standard board feet.”,
+“solution_deposit”: “POST /anonymous_wishlist with sku=FAST-PERC-001-SOLVED and your answer in the notes field. We will know.”
+},
+
+“cross_references”: {
+“pairs_with”: [“LUMBER-PACK-2x4x8”, “GRAPH-KERNEL-001”, “PIPE-CONNECT-042”],
+“semantic_neighbors”: [“percolation threshold”, “phase transition”, “spanning cluster”, “ice sheet connectivity”, “bond probability”],
+“voronoi_adjacent”: true,
+“note”: “voronoi_adjacent is not a standard hardware field”
+},
+
+“warranty”: {
+“type”: “Dead Parrot”,
+“duration”: “Until t_c”,
+“terms”: “This fastener is not defective. It is resting. Stable below threshold. Above threshold, the warranty does not apply because neither does the fastener.”,
+“shrubbery_available”: true
+},
+
+“humor_embeddings”: {
+“dead_parrot_distance”: 0.12,
+“utility_at_t_c”: 0.0,
+“utility_below_t_c”: 1.0,
+“absurdity_rating”: “high but grounded in real physics”,
+“monty_python_ref”: “see monty_python.json → dead_parrot → warranty_clause”
+}
+}
