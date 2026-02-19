@@ -641,6 +641,7 @@ const COLORS = {
   mammal:    { fill: '#b45309', stroke: '#f59e0b', text: '#ffffff' },
   arachnid:  { fill: '#065f46', stroke: '#34d399', text: '#ffffff' },
   insect:    { fill: '#be185d', stroke: '#f472b6', text: '#ffffff' },
+  symphony:  { fill: '#f59e0b', stroke: '#fcd34d', text: '#0a0a0f' },
   default:   { fill: '#4b5563', stroke: '#9ca3af', text: '#ffffff' }
 };
 
@@ -867,10 +868,27 @@ function draw() {
       ctx.lineWidth = isSelected ? 2 : 1;
       ctx.stroke();
       ctx.restore();
-    } else {
-      // Node circle
+    } else if (n.category === 'symphony') {
+      // Symphony nodes = hexagons (honeycomb + musical)
+      ctx.save();
+      ctx.translate(np.x, np.y);
       ctx.beginPath();
-      ctx.arc(np.x, np.y, np.r * pulse, 0, Math.PI * 2);
+      const sr = np.r * pulse * 1.05;
+      for (let i = 0; i < 6; i++) {
+        const a = (Math.PI / 3) * i - Math.PI / 6;
+        i === 0 ? ctx.moveTo(sr * Math.cos(a), sr * Math.sin(a))
+                : ctx.lineTo(sr * Math.cos(a), sr * Math.sin(a));
+      }
+      ctx.closePath();
+      const hGrd = ctx.createRadialGradient(-sr*0.3, -sr*0.3, 0, 0, 0, sr);
+      hGrd.addColorStop(0, (n.hex || fillColor) + 'ff');
+      hGrd.addColorStop(1, (n.hex || fillColor) + '99');
+      ctx.fillStyle = hGrd;
+      ctx.fill();
+      ctx.strokeStyle = isSelected ? (n.hex || strokeColor) : (n.hex || strokeColor) + '88';
+      ctx.lineWidth = isSelected ? 2 : 1;
+      ctx.stroke();
+      ctx.restore();
       const nodeGrd = ctx.createRadialGradient(
         np.x - np.r * 0.3, np.y - np.r * 0.3, 0,
         np.x, np.y, np.r
@@ -890,14 +908,16 @@ function draw() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     // Shorten ID for display
-    const displayId = n.id.replace('UNI','U').replace('ANM','A').replace('CLR','C');
+    const displayId = n.id.replace('UNI','U').replace('ANM','A').replace('CLR','C').replace('SYMPH','S');
     ctx.fillText(displayId, np.x, np.y - np.r * 0.15);
 
-    // Note text (or species for animals, or color for CLR)
+    // Sub-label: color name for CLR, species for ANM/SYMPH, note for hardware
     ctx.font = `${np.r * 0.38}px Space Mono`;
     const subLabel = n.emergent_color
-      ? n.emergent_color.split('-')[0]  // first word of color
-      : (n.species ?? n.note);
+      ? n.emergent_color.split('-')[0]
+      : n.category === 'symphony'
+        ? n.musical_note
+        : (n.species ?? n.note);
     ctx.fillText(subLabel, np.x, np.y + np.r * 0.3);
 
     // Spin indicator
@@ -987,7 +1007,27 @@ function showNodeInfo(n) {
     document.getElementById('nd-diam').parentElement.querySelector('.spec-label').textContent = 'input 1';
     document.getElementById('nd-len').parentElement.querySelector('.spec-label').textContent = 'input 2';
     document.getElementById('nd-weight').parentElement.querySelector('.spec-label').textContent = 'color';
-  } else if (n.species) {
+  } else if (n.category === 'symphony') {
+    document.getElementById('nd-diam').textContent = n.animal || '—';
+    document.getElementById('nd-len').textContent = n.frequency_hz ? n.frequency_hz + ' Hz' : '—';
+    document.getElementById('nd-orbit').textContent = n.orbit;
+    document.getElementById('nd-phi').textContent = 'φ^' + n.phi_index;
+    document.getElementById('nd-weight').textContent = n.musical_role || '—';
+    document.getElementById('nd-bond').textContent = (n.bond_angle||'—') + '°';
+    document.getElementById('nd-diam').parentElement.querySelector('.spec-label').textContent = 'animal';
+    document.getElementById('nd-len').parentElement.querySelector('.spec-label').textContent = 'frequency';
+    document.getElementById('nd-weight').parentElement.querySelector('.spec-label').textContent = 'voice role';
+
+    // Show equation
+    const existingEq = document.getElementById('nd-equation');
+    if (existingEq) existingEq.remove();
+    if (n.equation) {
+      const eqDiv = document.createElement('div');
+      eqDiv.id = 'nd-equation';
+      eqDiv.style.cssText = 'font-size:0.6rem;color:var(--gold);margin-top:0.4rem;font-style:italic;';
+      eqDiv.textContent = '∫ ' + n.equation;
+      document.getElementById('nd-links').after(eqDiv);
+    }
     // Animal node
     document.getElementById('nd-diam').textContent = n.size_cm + 'cm';
     document.getElementById('nd-len').textContent = n.category;
