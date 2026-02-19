@@ -393,48 +393,147 @@ letter-spacing: 0.2em;
 <script>
 const PHI = 1.6180339887;
 
-// Dynamic loader — tries pieces.json first, falls back to inline data
+// Multi-lattice loader — reads manifest.json, loads all enabled lattices
 let NODES = [];
+let LATTICE_META = {};
+let ACTIVE_FILTERS = new Set(['hardware','animals','color']);
+
+function normalize(n, latticeId) {
+  const orbit = n.orbit ?? n.orbit_radius ?? 1;
+  return {
+    ...n,
+    lattice: latticeId,
+    orbit,
+    phi_index: n.phi_index ?? Math.max(0, Math.round(Math.log(Math.max(orbit,1)) / Math.log(PHI))),
+    bond_angle: n.bond_angle ?? 109.5,
+    puzzle: n.puzzle ?? n.description ?? '',
+    note: n.musical_note ?? n.note ?? '?',
+    hex: n.hex ?? null
+  };
+}
+
+async function tryFetch(paths) {
+  for (const p of paths) {
+    try {
+      const r = await fetch(p);
+      if (r.ok) return { data: await r.json(), path: p };
+    } catch(e) {}
+  }
+  return null;
+}
 
 async function loadNodes() {
-  // Show loading state
-  document.getElementById('hint-text').textContent = '⟳ loading pieces.json...';
+  document.getElementById('hint-text').textContent = '⟳ loading manifest...';
 
-  // Try to load from Bits/pieces.json relative to this file
-  const sources = [
-    './Bits/pieces.json',
-    '../Bits/pieces.json', 
-    'pieces.json'
-  ];
+  // Try manifest first
+  const manifestResult = await tryFetch([
+    './Bits/manifest.json', '../Bits/manifest.json', 'manifest.json'
+  ]);
 
-  for (const src of sources) {
-    try {
-      const resp = await fetch(src);
-      if (resp.ok) {
-        const raw = await resp.json();
-        // Normalize field names — pieces.json uses orbit_radius, mandala uses orbit
-        NODES = raw.map(n => ({
-          ...n,
-          orbit: n.orbit ?? n.orbit_radius ?? 1,
-          phi_index: n.phi_index ?? Math.round(Math.log(n.orbit ?? n.orbit_radius ?? 1) / Math.log(PHI)),
-          bond_angle: n.bond_angle ?? n.tetrahedral_geometry?.angles?.[0] ?? 109.5,
-          puzzle: n.puzzle ?? n.description ?? '',
-          note: n.musical_note ?? n.note ?? '?',
-        }));
-        console.log(`Loaded ${NODES.length} nodes from ${src}`);
-        document.getElementById('hint-text').textContent = 
-          `↑ ${NODES.length} nodes loaded from ${src} · click any node to query`;
-        return true;
+  if (manifestResult) {
+    const manifest = manifestResult.data;
+    const base = manifestResult.path.replace('manifest.json','');
+    LATTICE_META = {};
+    NODES = [];
+
+    for (const lattice of manifest.lattices) {
+      if (!lattice.enabled) continue;
+      LATTICE_META[lattice.id] = lattice;
+
+      const result = await tryFetch([
+        base + lattice.file,
+        './Bits/' + lattice.file,
+        lattice.file
+      ]);
+
+      if (result) {
+        const nodes = result.data.map(n => normalize(n, lattice.id));
+        NODES.push(...nodes);
+        console.log(`Loaded ${nodes.length} nodes from ${lattice.id} (${result.path})`);
       }
-    } catch(e) { /* try next */ }
+    }
+
+    buildFilterUI(manifest.lattices);
+    updateHint();
+    return true;
   }
 
-  // Fallback to inline data
-  console.log('Using inline node data');
-  NODES = FALLBACK_NODES;
-  document.getElementById('hint-text').textContent = 
-    '↑ click any node to query · hover to preview · all specifications accurate';
+  // Fallback — try individual files
+  const sources = [
+    { id: 'hardware', file: './Bits/pieces.json' },
+    { id: 'animals',  file: './Bits/animal-pieces.json' },
+    { id: 'color',    file: './Bits/color-pieces.json' }
+  ];
+
+  for (const s of sources) {
+    const result = await tryFetch([s.file, s.file.replace('./Bits/','')]);
+    if (result) {
+      NODES.push(...result.data.map(n => normalize(n, s.id)));
+    }
+  }
+
+  if (NODES.length > 0) {
+    updateHint();
+    return true;
+  }
+
+  // Final fallback
+  NODES = FALLBACK_NODES.map(n => normalize(n, 'hardware'));
+  updateHint();
   return false;
+}
+
+function updateHint() {
+  const visible = NODES.filter(n => ACTIVE_FILTERS.has(n.lattice)).length;
+  document.getElementById('hint-text').textContent =
+    `↑ ${visible} nodes · ${NODES.length} total · click any node to query · all specifications accurate`;
+}
+
+function buildFilterUI(lattices) {
+  const strip = document.getElementById('api-strip');
+  const filterBar = document.createElement('div');
+  filterBar.id = 'filter-bar';
+  filterBar.style.cssText = `
+    display:flex; gap:0.5rem; margin-bottom:0.5rem;
+    flex-wrap:wrap; width:100%;
+  `;
+
+  lattices.forEach(lat => {
+    if (!lat.enabled) return;
+    const btn = document.createElement('button');
+    btn.textContent = lat.label;
+    btn.dataset.lattice = lat.id;
+    btn.style.cssText = `
+      background: ${lat.color_key}22;
+      border: 1px solid ${lat.color_key}88;
+      color: ${lat.color_key};
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      transition: all 0.2s;
+    `;
+    btn.addEventListener('click', () => toggleFilter(lat.id, lat.color_key, btn));
+    filterBar.appendChild(btn);
+  });
+
+  // Insert before api-strip
+  strip.parentNode.insertBefore(filterBar, strip);
+}
+
+function toggleFilter(latticeId, color, btn) {
+  if (ACTIVE_FILTERS.has(latticeId)) {
+    if (ACTIVE_FILTERS.size > 1) { // keep at least one
+      ACTIVE_FILTERS.delete(latticeId);
+      btn.style.opacity = '0.35';
+    }
+  } else {
+    ACTIVE_FILTERS.add(latticeId);
+    btn.style.opacity = '1';
+  }
+  updateHint();
+  computePositions();
 }
 
 // Fallback inline data (used when pieces.json not reachable)
@@ -659,12 +758,20 @@ function draw() {
   });
 
   // Draw covalent links
+  const visibleIds = new Set(
+    nodePositions.filter(np => ACTIVE_FILTERS.has(np.node.lattice)).map(np => np.node.id)
+  );
+
   nodePositions.forEach(np => {
-    np.node.links.forEach(linkId => {
+    if (!ACTIVE_FILTERS.has(np.node.lattice)) return;
+
+    (np.node.links || []).forEach(linkId => {
       const target = nodePositions.find(p => p.node.id === linkId);
       if (!target) return;
+      if (!visibleIds.has(linkId)) return;
       if (linkId < np.node.id) return; // avoid duplicates
 
+      const crossDomain = np.node.lattice !== target.node.lattice;
       const isHighlighted = selectedNode &&
         (selectedNode.id === np.node.id || selectedNode.id === linkId);
 
@@ -672,31 +779,53 @@ function draw() {
       ctx.moveTo(np.x, np.y);
       ctx.lineTo(target.x, target.y);
 
-      if (isHighlighted) {
-        ctx.strokeStyle = 'rgba(201,168,76,0.6)';
-        ctx.lineWidth = 1.5;
+      if (crossDomain) {
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = isHighlighted
+          ? 'rgba(184,115,51,0.9)'   // copper bright
+          : 'rgba(184,115,51,0.35)'; // copper dim
+        ctx.lineWidth = isHighlighted ? 2 : 1.2;
       } else {
-        ctx.strokeStyle = 'rgba(201,168,76,0.12)';
-        ctx.lineWidth = 0.7;
+        ctx.setLineDash([]);
+        ctx.strokeStyle = isHighlighted
+          ? 'rgba(201,168,76,0.7)'
+          : 'rgba(201,168,76,0.12)';
+        ctx.lineWidth = isHighlighted ? 1.5 : 0.7;
       }
       ctx.stroke();
+      ctx.setLineDash([]);
 
-      // Link midpoint marker
       if (isHighlighted) {
         const mx = (np.x + target.x) / 2;
         const my = (np.y + target.y) / 2;
         ctx.beginPath();
-        ctx.arc(mx, my, 2, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(201,168,76,0.5)';
+        ctx.arc(mx, my, crossDomain ? 3 : 2, 0, Math.PI * 2);
+        ctx.fillStyle = crossDomain ? 'rgba(184,115,51,0.8)' : 'rgba(201,168,76,0.5)';
         ctx.fill();
+
+        // Label cross-domain links
+        if (crossDomain) {
+          ctx.font = `${baseR * 0.3}px Space Mono`;
+          ctx.fillStyle = 'rgba(184,115,51,0.7)';
+          ctx.textAlign = 'center';
+          ctx.fillText('⟷', mx, my - 8);
+        }
       }
     });
   });
 
   // Draw nodes
+  // Draw nodes — filter by active lattice
   nodePositions.forEach(np => {
+    if (!ACTIVE_FILTERS.has(np.node.lattice)) return;
+
     const n = np.node;
     const colors = getColor(n.category);
+    // CLR nodes use their own emergent color
+    const fillColor = n.hex || colors.fill;
+    const strokeColor = n.hex ? n.hex : colors.stroke;
+    const textColor = colors.text;
+
     const isSelected = selectedNode && selectedNode.id === n.id;
     const isHovered = hoveredNode && hoveredNode.id === n.id;
     const pulse = isSelected ? (0.85 + 0.15 * Math.sin(animFrame * 0.05)) : 1;
@@ -704,7 +833,7 @@ function draw() {
     // Outer glow
     if (isSelected || isHovered) {
       const glow = ctx.createRadialGradient(np.x, np.y, 0, np.x, np.y, np.r * 2.5);
-      glow.addColorStop(0, colors.fill + '40');
+      glow.addColorStop(0, fillColor + '40');
       glow.addColorStop(1, 'transparent');
       ctx.fillStyle = glow;
       ctx.beginPath();
@@ -716,38 +845,60 @@ function draw() {
     if (isSelected) {
       ctx.beginPath();
       ctx.arc(np.x, np.y, np.r * (1.6 + 0.3 * Math.sin(animFrame * 0.05)), 0, Math.PI * 2);
-      ctx.strokeStyle = colors.stroke + '60';
+      ctx.strokeStyle = strokeColor + '60';
       ctx.lineWidth = 1;
       ctx.stroke();
     }
 
-    // Node circle
-    ctx.beginPath();
-    ctx.arc(np.x, np.y, np.r * pulse, 0, Math.PI * 2);
-    const nodeGrd = ctx.createRadialGradient(
-      np.x - np.r * 0.3, np.y - np.r * 0.3, 0,
-      np.x, np.y, np.r
-    );
-    nodeGrd.addColorStop(0, colors.stroke);
-    nodeGrd.addColorStop(1, colors.fill);
-    ctx.fillStyle = nodeGrd;
-    ctx.fill();
-
-    // Border
-    ctx.strokeStyle = isSelected ? colors.stroke : colors.fill + 'aa';
-    ctx.lineWidth = isSelected ? 2 : 1;
-    ctx.stroke();
+    // CLR nodes get a diamond shape instead of circle to distinguish them
+    if (n.category === 'color') {
+      ctx.save();
+      ctx.translate(np.x, np.y);
+      ctx.rotate(Math.PI / 4);
+      ctx.beginPath();
+      const s = np.r * pulse * 1.1;
+      ctx.rect(-s/2, -s/2, s, s);
+      const nodeGrd = ctx.createRadialGradient(-s*0.3, -s*0.3, 0, 0, 0, s);
+      nodeGrd.addColorStop(0, fillColor + 'ff');
+      nodeGrd.addColorStop(1, fillColor + 'aa');
+      ctx.fillStyle = nodeGrd;
+      ctx.fill();
+      ctx.strokeStyle = isSelected ? fillColor : fillColor + '88';
+      ctx.lineWidth = isSelected ? 2 : 1;
+      ctx.stroke();
+      ctx.restore();
+    } else {
+      // Node circle
+      ctx.beginPath();
+      ctx.arc(np.x, np.y, np.r * pulse, 0, Math.PI * 2);
+      const nodeGrd = ctx.createRadialGradient(
+        np.x - np.r * 0.3, np.y - np.r * 0.3, 0,
+        np.x, np.y, np.r
+      );
+      nodeGrd.addColorStop(0, strokeColor);
+      nodeGrd.addColorStop(1, fillColor);
+      ctx.fillStyle = nodeGrd;
+      ctx.fill();
+      ctx.strokeStyle = isSelected ? strokeColor : fillColor + 'aa';
+      ctx.lineWidth = isSelected ? 2 : 1;
+      ctx.stroke();
+    }
 
     // Node ID text
-    ctx.fillStyle = colors.text;
+    ctx.fillStyle = textColor;
     ctx.font = `bold ${np.r * 0.45}px Space Mono`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(n.id.replace('UNI', 'U'), np.x, np.y - np.r * 0.15);
+    // Shorten ID for display
+    const displayId = n.id.replace('UNI','U').replace('ANM','A').replace('CLR','C');
+    ctx.fillText(displayId, np.x, np.y - np.r * 0.15);
 
-    // Note text
+    // Note text (or species for animals, or color for CLR)
     ctx.font = `${np.r * 0.38}px Space Mono`;
-    ctx.fillText(n.note, np.x, np.y + np.r * 0.3);
+    const subLabel = n.emergent_color
+      ? n.emergent_color.split('-')[0]  // first word of color
+      : (n.species ?? n.note);
+    ctx.fillText(subLabel, np.x, np.y + np.r * 0.3);
 
     // Spin indicator
     const spinY = np.y - np.r - 6;
@@ -811,23 +962,69 @@ function showNodeInfo(n) {
   nd.classList.add('active');
 
   document.getElementById('nd-id').textContent = n.id;
-  document.getElementById('nd-category').textContent = n.category + ' · ' + n.description;
-  document.getElementById('nd-note').textContent = n.note;
+
+  // Category + lattice label
+  const latticeLabel = n.lattice ? ` · [${n.lattice}]` : '';
+  document.getElementById('nd-category').textContent = n.category + latticeLabel;
+
+  // Note — or musical interval for CLR nodes
+  document.getElementById('nd-note').textContent = n.musical_interval || n.note || '?';
 
   const spinEl = document.getElementById('nd-spin');
-  spinEl.textContent = 'spin ' + n.spin + (n.spin === 'up' ? ' ↑' : ' ↓');
-  spinEl.className = 'node-spin spin-' + n.spin;
+  spinEl.textContent = 'spin ' + (n.spin||'?') + (n.spin === 'up' ? ' ↑' : ' ↓');
+  spinEl.className = 'node-spin spin-' + (n.spin||'up');
 
-  document.getElementById('nd-diam').textContent = n.diameter_mm + 'mm';
-  document.getElementById('nd-len').textContent = n.length_mm + 'mm';
-  document.getElementById('nd-orbit').textContent = n.orbit;
-  document.getElementById('nd-phi').textContent = 'φ^' + n.phi_index + ' ≈ ' + (Math.pow(PHI, n.phi_index)).toFixed(3);
-  document.getElementById('nd-weight').textContent = n.weight_g + 'g';
-  document.getElementById('nd-bond').textContent = n.bond_angle + '°';
-  document.getElementById('nd-links').textContent = n.links.join(' · ');
-  document.getElementById('nd-puzzle').textContent = '◈ ' + n.puzzle;
+  // Adaptive spec grid depending on node type
+  if (n.category === 'color') {
+    document.getElementById('nd-diam').textContent = n.inputs?.[0] || '—';
+    document.getElementById('nd-len').textContent = n.inputs?.[1] || '—';
+    document.getElementById('nd-orbit').textContent = n.orbit;
+    document.getElementById('nd-phi').textContent = 'φ^' + n.phi_index;
+    document.getElementById('nd-weight').textContent = n.emergent_color || '—';
+    document.getElementById('nd-bond').textContent = (n.bond_angle||'—') + '°';
+    // Update spec labels for color nodes
+    document.querySelector('#nd-diam').previousElementSibling?.remove();
+    document.getElementById('nd-diam').parentElement.querySelector('.spec-label').textContent = 'input 1';
+    document.getElementById('nd-len').parentElement.querySelector('.spec-label').textContent = 'input 2';
+    document.getElementById('nd-weight').parentElement.querySelector('.spec-label').textContent = 'color';
+  } else if (n.species) {
+    // Animal node
+    document.getElementById('nd-diam').textContent = n.size_cm + 'cm';
+    document.getElementById('nd-len').textContent = n.category;
+    document.getElementById('nd-orbit').textContent = n.orbit;
+    document.getElementById('nd-phi').textContent = 'φ^' + n.phi_index;
+    document.getElementById('nd-weight').textContent = (n.behaviors||[]).length + ' behaviors';
+    document.getElementById('nd-bond').textContent = (n.bond_angle||'—') + '°';
+    document.getElementById('nd-diam').parentElement.querySelector('.spec-label').textContent = 'size';
+    document.getElementById('nd-len').parentElement.querySelector('.spec-label').textContent = 'class';
+    document.getElementById('nd-weight').parentElement.querySelector('.spec-label').textContent = 'behaviors';
+  } else {
+    // Hardware node
+    document.getElementById('nd-diam').textContent = (n.diameter_mm||'—') + 'mm';
+    document.getElementById('nd-len').textContent = (n.length_mm||'—') + 'mm';
+    document.getElementById('nd-orbit').textContent = n.orbit;
+    document.getElementById('nd-phi').textContent = 'φ^' + n.phi_index + ' ≈ ' + Math.pow(PHI, n.phi_index).toFixed(3);
+    document.getElementById('nd-weight').textContent = (n.weight_g||'—') + 'g';
+    document.getElementById('nd-bond').textContent = (n.bond_angle||'—') + '°';
+    document.getElementById('nd-diam').parentElement.querySelector('.spec-label').textContent = 'diameter';
+    document.getElementById('nd-len').parentElement.querySelector('.spec-label').textContent = 'length';
+    document.getElementById('nd-weight').parentElement.querySelector('.spec-label').textContent = 'weight';
+  }
 
-  // Auto-trigger API call
+  document.getElementById('nd-links').textContent = (n.links||[]).join(' · ') || 'none';
+  document.getElementById('nd-puzzle').textContent = '◈ ' + (n.puzzle || n.description || '');
+
+  // Show behaviors for animals
+  const existing = document.getElementById('nd-behaviors');
+  if (existing) existing.remove();
+  if (n.behaviors && n.behaviors.length) {
+    const bDiv = document.createElement('div');
+    bDiv.id = 'nd-behaviors';
+    bDiv.style.cssText = 'font-size:0.6rem;color:var(--violet);margin-top:0.4rem;';
+    bDiv.textContent = '↳ ' + n.behaviors.join(' · ');
+    document.getElementById('nd-puzzle').after(bDiv);
+  }
+
   callAPI('pieces', n.id);
 }
 
