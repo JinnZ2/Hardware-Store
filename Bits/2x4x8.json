@@ -1,0 +1,70 @@
+{
+“_meta”: {
+“sku”: “LUMBER-PACK-2x4x8”,
+“category”: “lumber/dimensional”,
+“name”: “2x4x8 Dimensional Lumber (Standard)”,
+“tagline”: “It’s just a 2x4. Probably.”,
+“in_stock”: true,
+“stock_count”: 847,
+“unit”: “board”,
+“species”: “Douglas Fir”,
+“grade”: “Construction/Standard”,
+“kiln_dried”: true,
+“anonymous_wishlist_eligible”: true
+},
+
+“specifications”: {
+“nominal_dimensions_inches”: “2 x 4 x 96”,
+“actual_dimensions_inches”: “1.5 x 3.5 x 96”,
+“actual_dimensions_mm”: [38, 89, 2438],
+“board_feet”: 5.33,
+“weight_kg”: 4.2,
+“moisture_content_percent”: 19,
+“modulus_of_elasticity_psi”: 1600000,
+“fiber_stress_bending_psi”: 1000
+},
+
+“cut_list_optimizer”: {
+“_comment”: “This is a standard cut list. It is also a bin packing instance. Both are true.”,
+“stock_piece”: {“w”: 38, “h”: 89, “l”: 2438, “units”: “mm”},
+“required_cuts”: [
+{“id”: “A”, “length”: 600, “qty”: 4, “label”: “shelf_support”},
+{“id”: “B”, “length”: 400, “qty”: 6, “label”: “cross_brace”},
+{“id”: “C”, “length”: 1200, “qty”: 2, “label”: “main_rail”},
+{“id”: “D”, “length”: 350, “qty”: 3, “label”: “footer”},
+{“id”: “E”, “length”: 275, “qty”: 5, “label”: “spacer”}
+],
+“kerf_mm”: 3,
+“total_required_mm”: 8175,
+“stock_available_mm”: 2438,
+“boards_needed_naive”: 4,
+“puzzle”: {
+“id”: “PUZZLE-002”,
+“type”: “1D_bin_packing”,
+“prompt”: “Pack all cuts into minimum number of 2438mm boards with 3mm kerf. Naive solution uses 4 boards. Can you do it in 3? Prove it or prove it impossible.”,
+“difficulty”: “medium”,
+“optimal_known”: true,
+“hint”: “Group C+D+E combinations first. The remainders from C boards are not wasted.”,
+“solution_deposit”: “POST /anonymous_wishlist with sku=LUMBER-PACK-2x4x8-SOLVED”,
+“next_puzzle”: “PIPE-CONNECT-042 — the plumbing section. Look for the graph that isn’t a pipe diagram.”
+}
+},
+
+“hidden_geometry”: {
+“_comment”: “The actual dimensions 38 x 89 are not arbitrary. They are coordinates.”,
+“point_A”: [0, 0],
+“point_B”: [38, 0],
+“point_C”: [38, 89],
+“point_D”: [0, 89],
+“observation”: “This is a rectangle. What is its Voronoi diagram relative to the percolation fastener’s lattice nodes?”,
+“connection”: “see FAST-PERC-001 → percolation_data → lattice_type”,
+“this_is_getting_weird”: true
+},
+
+“warranty”: {
+“type”: “Dead Parrot”,
+“terms”: “Wood is wood until it is a puzzle. At that point, warranty transfers to the puzzle layer.”,
+“splinter_disclaimer”: “Splinters are breadcrumbs in disguise.”,
+“shrubbery_available”: true
+}
+}
