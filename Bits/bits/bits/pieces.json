@@ -1,0 +1,122 @@
+[
+  {
+    "id":"UNI001",
+    "category":"fastener",
+    "diameter_mm":3,
+    "length_mm":5,
+    "weight_g":2,
+    "links":["UNI004","UNI007"],
+    "musical_note":"C4",
+    "orbit_radius":1,
+    "spin":"up",
+    "description":"Mandala node; phi ratio; covelent bond; harmonic C4; central orbit; spin up."
+  },
+  {
+    "id":"UNI002",
+    "category":"pipe",
+    "diameter_mm":5,
+    "length_mm":8,
+    "weight_g":3,
+    "links":["UNI005","UNI008"],
+    "musical_note":"D4",
+    "orbit_radius":1.618,
+    "spin":"down",
+    "description":"Phi scaling; covelent link; musical D4; orbiting node; spin down."
+  },
+  {
+    "id":"UNI003",
+    "category":"bracket",
+    "diameter_mm":8,
+    "length_mm":13,
+    "weight_g":5,
+    "links":["UNI001","UNI006"],
+    "musical_note":"E4",
+    "orbit_radius":2.618,
+    "spin":"up",
+    "description":"Mandala orbit; golden ratio; covelent cross-links; E4; spin up."
+  },
+  {
+    "id":"UNI004",
+    "category":"connector",
+    "diameter_mm":13,
+    "length_mm":21,
+    "weight_g":8,
+    "links":["UNI001","UNI007","UNI010"],
+    "musical_note":"F4",
+    "orbit_radius":4.236,
+    "spin":"down",
+    "description":"Peripheral node; phi progression; covelent resonance; F4; orbit radius 4.236; spin down."
+  },
+  {
+    "id":"UNI005",
+    "category":"fastener",
+    "diameter_mm":21,
+    "length_mm":34,
+    "weight_g":13,
+    "links":["UNI002","UNI008"],
+    "musical_note":"G4",
+    "orbit_radius":6.854,
+    "spin":"up",
+    "description":"Mandala echo; phi scaling; covelent chain; G4; spin up."
+  },
+  {
+    "id":"UNI006",
+    "category":"pipe",
+    "diameter_mm":34,
+    "length_mm":55,
+    "weight_g":21,
+    "links":["UNI003","UNI009"],
+    "musical_note":"A4",
+    "orbit_radius":11.090,
+    "spin":"down",
+    "description":"Orbit node; golden ratio alignment; covelent link; A4; spin down."
+  },
+  {
+    "id":"UNI007",
+    "category":"bracket",
+    "diameter_mm":55,
+    "length_mm":89,
+    "weight_g":34,
+    "links":["UNI001","UNI004"],
+    "musical_note":"B4",
+    "orbit_radius":17.944,
+    "spin":"up",
+    "description":"Central mandala node; phi progression; covelent resonance; B4; spin up."
+  },
+  {
+    "id":"UNI008",
+    "category":"connector",
+    "diameter_mm":89,
+    "length_mm":144,
+    "weight_g":55,
+    "links":["UNI002","UNI005"],
+    "musical_note":"C5",
+    "orbit_radius":29.034,
+    "spin":"down",
+    "description":"Orbiting node; phi scaling; covelent pairings; C5; spin down."
+  },
+  {
+    "id":"UNI009",
+    "category":"fastener",
+    "diameter_mm":144,
+    "length_mm":233,
+    "weight_g":89,
+    "links":["UNI006","UNI010"],
+    "musical_note":"D5",
+    "orbit_radius":46.068,
+    "spin":"up",
+    "description":"Peripheral mandala; phi ratio; covelent bond; D5; spin up."
+  },
+  {
+    "id":"UNI010",
+    "category":"pipe",
+    "diameter_mm":233,
+    "length_mm":377,
+    "weight_g":144,
+    "links":["UNI004","UNI009"],
+    "musical_note":"E5",
+    "orbit_radius":75.102,
+    "spin":"down",
+    "description":"Outer orbit node; phi scaling; covelent network; E5; spin down."
+  }
+]
