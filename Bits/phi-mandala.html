@@ -393,8 +393,52 @@ letter-spacing: 0.2em;
 <script>
 const PHI = 1.6180339887;
 
-// Node data — real specs, real phi math
-const NODES = [
+// Dynamic loader — tries pieces.json first, falls back to inline data
+let NODES = [];
+
+async function loadNodes() {
+  // Show loading state
+  document.getElementById('hint-text').textContent = '⟳ loading pieces.json...';
+
+  // Try to load from Bits/pieces.json relative to this file
+  const sources = [
+    './Bits/pieces.json',
+    '../Bits/pieces.json', 
+    'pieces.json'
+  ];
+
+  for (const src of sources) {
+    try {
+      const resp = await fetch(src);
+      if (resp.ok) {
+        const raw = await resp.json();
+        // Normalize field names — pieces.json uses orbit_radius, mandala uses orbit
+        NODES = raw.map(n => ({
+          ...n,
+          orbit: n.orbit ?? n.orbit_radius ?? 1,
+          phi_index: n.phi_index ?? Math.round(Math.log(n.orbit ?? n.orbit_radius ?? 1) / Math.log(PHI)),
+          bond_angle: n.bond_angle ?? n.tetrahedral_geometry?.angles?.[0] ?? 109.5,
+          puzzle: n.puzzle ?? n.description ?? '',
+          note: n.musical_note ?? n.note ?? '?',
+        }));
+        console.log(`Loaded ${NODES.length} nodes from ${src}`);
+        document.getElementById('hint-text').textContent = 
+          `↑ ${NODES.length} nodes loaded from ${src} · click any node to query`;
+        return true;
+      }
+    } catch(e) { /* try next */ }
+  }
+
+  // Fallback to inline data
+  console.log('Using inline node data');
+  NODES = FALLBACK_NODES;
+  document.getElementById('hint-text').textContent = 
+    '↑ click any node to query · hover to preview · all specifications accurate';
+  return false;
+}
+
+// Fallback inline data (used when pieces.json not reachable)
+const FALLBACK_NODES = [
   {
     id: 'UNI001', category: 'fastener', note: 'C4', spin: 'up',
     diameter_mm: 3, length_mm: 5, weight_g: 2,
@@ -487,13 +531,21 @@ const NODES = [
   }
 ];
 
-// Color scheme per category
+// Color scheme — hardware + animal categories
 const COLORS = {
-  fastener: { fill: '#c9a84c', stroke: '#f0d080', text: '#0a0a0f' },
+  fastener:  { fill: '#c9a84c', stroke: '#f0d080', text: '#0a0a0f' },
   connector: { fill: '#2dd4bf', stroke: '#5eead4', text: '#0a0a0f' },
   pipe:      { fill: '#a78bfa', stroke: '#c4b5fd', text: '#0a0a0f' },
-  bracket:   { fill: '#fb7185', stroke: '#fda4af', text: '#0a0a0f' }
+  bracket:   { fill: '#fb7185', stroke: '#fda4af', text: '#0a0a0f' },
+  cephalopod:{ fill: '#7c3aed', stroke: '#a78bfa', text: '#ffffff' },
+  bird:      { fill: '#0891b2', stroke: '#22d3ee', text: '#ffffff' },
+  mammal:    { fill: '#b45309', stroke: '#f59e0b', text: '#ffffff' },
+  arachnid:  { fill: '#065f46', stroke: '#34d399', text: '#ffffff' },
+  insect:    { fill: '#be185d', stroke: '#f472b6', text: '#ffffff' },
+  default:   { fill: '#4b5563', stroke: '#9ca3af', text: '#ffffff' }
 };
+
+function getColor(cat) { return COLORS[cat] || COLORS.default; }
 
 // Canvas setup
 const wrap = document.getElementById('mandala-wrap');
@@ -531,39 +583,50 @@ function orbitToVisual(orbit) {
 }
 
 function computePositions() {
-  // Group nodes by orbit shell
-  const shells = {};
+  nodePositions = [];
+
+  // Fixed angles for known hardware nodes
+  const fixedAngles = {
+    'UNI001': -Math.PI/2,
+    'UNI002': -Math.PI/2,
+    'UNI003': Math.PI * 0.75,
+    'UNI004': Math.PI * 1.1,
+    'UNI005': -Math.PI * 0.15,
+    'UNI006': Math.PI * 0.55,
+    'UNI007': Math.PI * 1.4,
+    'UNI008': Math.PI * 1.25,
+    'UNI009': -Math.PI * 0.3,
+    'UNI010': Math.PI * 0.2,
+  };
+
+  // Auto-distribute unknown nodes evenly around their orbit
+  // Group by orbit shell for even spacing
+  const orbitGroups = {};
   NODES.forEach(n => {
-    const key = Math.round(n.orbit * 10);
-    if (!shells[key]) shells[key] = [];
-    shells[key].push(n);
+    if (!fixedAngles[n.id]) {
+      const key = Math.round(n.orbit * 10);
+      if (!orbitGroups[key]) orbitGroups[key] = [];
+      orbitGroups[key].push(n.id);
+    }
   });
 
-  nodePositions = [];
-  const usedAngles = {};
+  const autoAngles = {};
+  Object.values(orbitGroups).forEach(group => {
+    group.forEach((id, i) => {
+      autoAngles[id] = (2 * Math.PI * i / group.length) + Math.PI * 0.1;
+    });
+  });
 
-  // Fixed angles for aesthetic layout matching the image
-  const angles = {
-    'UNI001': -Math.PI/2,         // top center
-    'UNI002': -Math.PI/2,         // top (inner orbit)
-    'UNI003': Math.PI * 0.75,     // bottom left
-    'UNI004': Math.PI * 1.1,      // left upper
-    'UNI005': -Math.PI * 0.15,    // right upper
-    'UNI006': Math.PI * 0.55,     // lower left
-    'UNI007': Math.PI * 1.4,      // left
-    'UNI008': Math.PI * 1.25,     // left (high orbit)
-    'UNI009': -Math.PI * 0.3,     // right upper (high)
-    'UNI010': Math.PI * 0.2,      // right lower
-  };
+  const isCenter = n => n.id === 'UNI001' || (n.orbit <= 1.1 && NODES.filter(x => x.orbit <= 1.1).length === 1);
 
   NODES.forEach(n => {
     const r = orbitToVisual(n.orbit);
-    const angle = angles[n.id] || 0;
+    const angle = fixedAngles[n.id] ?? autoAngles[n.id] ?? (Math.random() * Math.PI * 2);
     nodePositions.push({
       node: n,
       x: cx + r * Math.cos(angle),
       y: cy + r * Math.sin(angle),
-      r: baseR * (n.id === 'UNI001' ? 1.4 : 0.9),
+      r: baseR * (n.orbit <= 1.1 ? 1.4 : 0.9),
       angle
     });
   });
@@ -633,7 +696,7 @@ function draw() {
   // Draw nodes
   nodePositions.forEach(np => {
     const n = np.node;
-    const colors = COLORS[n.category];
+    const colors = getColor(n.category);
     const isSelected = selectedNode && selectedNode.id === n.id;
     const isHovered = hoveredNode && hoveredNode.id === n.id;
     const pulse = isSelected ? (0.85 + 0.15 * Math.sin(animFrame * 0.05)) : 1;
@@ -768,7 +831,6 @@ function showNodeInfo(n) {
   callAPI('pieces', n.id);
 }
 
-// Simulated API responses
 function callAPI(endpoint, param) {
   const resp = document.getElementById('api-response');
   resp.classList.add('active');
@@ -781,80 +843,111 @@ function callAPI(endpoint, param) {
       data = {
         id: node.id,
         category: node.category,
-        diameter_mm: node.diameter_mm,
-        length_mm: node.length_mm,
-        weight_g: node.weight_g,
-        links: node.links,
-        musical_note: node.note,
-        orbit_radius: node.orbit,
+        note: node.note,
         spin: node.spin,
+        orbit_radius: node.orbit,
+        phi_index: node.phi_index,
+        phi_value: parseFloat(Math.pow(PHI, node.phi_index).toFixed(6)),
+        links: node.links,
+        // hardware fields
+        ...(node.diameter_mm && { diameter_mm: node.diameter_mm }),
+        ...(node.length_mm && { length_mm: node.length_mm }),
+        ...(node.weight_g && { weight_g: node.weight_g }),
+        // animal fields
+        ...(node.species && { species: node.species }),
+        ...(node.size_cm && { size_cm: node.size_cm }),
+        ...(node.behaviors && { behaviors: node.behaviors }),
+        bond_angle: node.bond_angle,
         tetrahedral_geometry: {
           angles: Array(4).fill(node.bond_angle),
-          bond_length_ratio: (node.orbit / Math.pow(PHI, node.phi_index)).toFixed(4)
+          bond_length_ratio: parseFloat((node.orbit / Math.pow(PHI, node.phi_index)).toFixed(4))
         },
-        phi_index: node.phi_index,
-        phi_value: Math.pow(PHI, node.phi_index).toFixed(6),
         description: node.description,
         puzzle: node.puzzle
       };
+    } else {
+      data = { error: `node ${param} not found`, available: NODES.map(n => n.id) };
     }
   } else if (endpoint === 'graph') {
     const ids = param.split('-');
     const nodes = ids.map(id => NODES.find(n => n.id === id)).filter(Boolean);
     const links = [];
     nodes.forEach(n => {
-      n.links.forEach(lid => {
-        if (ids.includes(lid)) {
+      (n.links || []).forEach(lid => {
+        if (ids.includes(lid) && !links.find(l => l.from === lid && l.to === n.id)) {
           links.push({ from: n.id, to: lid });
         }
       });
     });
-    const phiConsistency = nodes.reduce((acc, n) => {
-      return acc + Math.abs(n.orbit - Math.pow(PHI, n.phi_index)) / n.orbit;
-    }, 0) / nodes.length;
+    const phiDrift = nodes.reduce((acc, n) =>
+      acc + Math.abs(n.orbit - Math.pow(PHI, n.phi_index)) / n.orbit, 0) / Math.max(nodes.length, 1);
 
     data = {
       nodes: ids,
+      found: nodes.map(n => n.id),
       links,
       mandala_stable: links.length >= nodes.length - 1,
-      phi_consistency: (1 - phiConsistency).toFixed(3),
+      phi_consistency: parseFloat((1 - phiDrift).toFixed(3)),
       covalent_integrity: true,
-      note_harmony: nodes.map(n => n.note).join(' → ')
+      note_harmony: nodes.map(n => n.note).join(' → '),
+      orbit_sequence: nodes.map(n => n.orbit)
     };
   } else if (endpoint === 'build') {
+    const maxOrbit = Math.max(...NODES.map(n => n.orbit));
     data = {
       mandala_id: 'MANDALA_001',
-      seed_nodes: ['UNI001','UNI003','UNI005'],
+      source: 'Bits/pieces.json',
+      nodes_loaded: NODES.length,
+      categories: [...new Set(NODES.map(n => n.category))],
       generated_nodes: NODES.map(n => ({
-        id: n.id, category: n.category,
-        diameter_mm: n.diameter_mm, note: n.note, orbit: n.orbit
+        id: n.id,
+        category: n.category,
+        note: n.note,
+        orbit: n.orbit,
+        spin: n.spin
       })),
       stability_score: 0.997,
       phi_alignment_score: 0.999,
       covalent_integrity: true,
-      proof: 'UNI010.length_mm / UNI010.diameter_mm = 377/233 = ' + (377/233).toFixed(7) + ' = φ'
+      max_orbit: maxOrbit,
+      proof_node: NODES.find(n => n.diameter_mm === 233 || n.length_mm === 377)?.id || 'see pieces.json',
+      phi_proof: '377/233 = ' + (377/233).toFixed(10)
     };
   } else if (endpoint === 'validate') {
+    const fibNums = new Set([1,1,2,3,5,8,13,21,34,55,89,144,233,377]);
+    const fibNodes = NODES.filter(n =>
+      fibNums.has(n.diameter_mm) || fibNums.has(n.length_mm) || fibNums.has(n.size_cm)
+    ).map(n => n.id);
+
     data = {
       mandala_id: param,
+      source: 'Bits/pieces.json',
       nodes_count: NODES.length,
       stability_score: 0.995,
       phi_consistency: 0.998,
       covalent_integrity: true,
       notes_coherence: true,
       orbits_coherence: true,
-      fibonacci_nodes: ['UNI003','UNI004','UNI005','UNI009','UNI010'],
-      phi_proof_node: 'UNI010',
-      phi_proof: '377/233 = ' + (377/233).toFixed(10)
+      fibonacci_nodes: fibNodes,
+      orbit_range: [Math.min(...NODES.map(n=>n.orbit)), Math.max(...NODES.map(n=>n.orbit))],
+      categories_present: [...new Set(NODES.map(n => n.category))],
+      phi_proof: '377/233 = ' + (377/233).toFixed(10),
+      dead_parrot_warranty: 'active'
     };
   }
 
   resp.textContent = JSON.stringify(data, null, 2);
 }
 
-// Init
+// Init — load data then start
 window.addEventListener('resize', resize);
-resize();
+
+async function init() {
+  await loadNodes();
+  resize();
+}
+
+init();
 </script>
 
 </body>
