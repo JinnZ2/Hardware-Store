@@ -31,6 +31,14 @@
 “description”: “CLR nodes — chemical reactions mapped to color and music. Cross-domain bridges.”,
 “color_key”: “#2dd4bf”,
 “enabled”: true
+},
+{
+“id”: “symphony”,
+“file”: “symphony-pieces.json”,
+“label”: “Symphony”,
+“description”: “SYMPH nodes — each animal as a musical voice. Frequency, role, equation, puzzle.”,
+“color_key”: “#f59e0b”,
+“enabled”: true
 }
 ],
 
