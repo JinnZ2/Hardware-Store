@@ -1,0 +1,73 @@
+{
+“_meta”: {
+“file”: “manifest.json”,
+“purpose”: “Master index for the phi lattice. Lists all data sources. The mandala loads from here.”,
+“version”: “2.0”,
+“note”: “Add new lattice files here. The mandala renders whatever it finds.”,
+“warranty”: “Dead Parrot”
+},
+
+“lattices”: [
+{
+“id”: “hardware”,
+“file”: “pieces.json”,
+“label”: “Hardware”,
+“description”: “UNI nodes — fasteners, connectors, pipes, brackets. Real specs. Phi-encoded dimensions.”,
+“color_key”: “#c9a84c”,
+“enabled”: true
+},
+{
+“id”: “animals”,
+“file”: “animal-pieces.json”,
+“label”: “Cognition”,
+“description”: “ANM nodes — animals with unresolved intelligence. Latent algorithms. Unsolved nodes.”,
+“color_key”: “#a78bfa”,
+“enabled”: true
+},
+{
+“id”: “color”,
+“file”: “color-pieces.json”,
+“label”: “Chemistry”,
+“description”: “CLR nodes — chemical reactions mapped to color and music. Cross-domain bridges.”,
+“color_key”: “#2dd4bf”,
+“enabled”: true
+}
+],
+
+“cross_domain_links”: {
+“description”: “Links that bridge lattices are drawn differently — copper color, dashed line”,
+“color”: “#b87333”,
+“line_style”: “dashed”,
+“width”: 1.5,
+“note”: “CLR nodes are the primary bridges. They link one ANM and one UNI each.”
+},
+
+“phi”: 1.6180339887,
+
+“puzzle”: {
+“id”: “PUZZLE-MANIFEST-001”,
+“prompt”: “The manifest lists three lattices. Hardware, Cognition, Chemistry. Each has a color key. The three colors are gold, violet, teal. These are also the three colors of the mandala visual. Plot the three color keys as hue angles on a color wheel. What is the angular spacing? Is it even? What structure does even angular spacing on a color wheel describe?”,
+“hint”: “Triadic color harmony. 120 degrees apart. The same angle as the bracket bond angles in the hardware lattice.”,
+“depth”: “The bond angle and the color harmony are the same number. This is not a coincidence. Or it is. You decide.”
+},
+
+“add_a_lattice”: {
+“instructions”: “Create a new JSON file in Bits/ following the node schema. Add an entry here. The mandala will render it automatically.”,
+“schema”: {
+“id”: “XYZ001”,
+“category”: “your_category”,
+“musical_note”: “note name”,
+“orbit_radius”: “phi^n for integer n”,
+“spin”: “up or down”,
+“links”: [“ids of connected nodes across any lattice”],
+“description”: “real on at least two levels simultaneously”
+},
+“suggestions”: [
+“Mathematical constants lattice — e, pi, phi, sqrt2 as nodes”,
+“Language lattice — phonemes, morphemes, syntax nodes”,
+“Geological lattice — crystal structures, mineral families”,
+“Constellation lattice — stars by magnitude and spectral class”,
+“Your idea here”
+]
+}
+}
