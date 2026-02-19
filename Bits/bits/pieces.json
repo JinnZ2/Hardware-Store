@@ -1,0 +1,22 @@
+[
+  {"id":"PHI001","category":"fastener","diameter_mm":3,"length_mm":5,"weight_g":2,"links":["PHI003","PHI006"],"description":"Mandala node; phi ratio; covelent pairings."},
+  {"id":"PHI002","category":"pipe","diameter_mm":5,"length_mm":8,"weight_g":3,"links":["PHI004","PHI007"],"description":"Orbiting sequence; phi alignment; covelent connection."},
+  {"id":"PHI003","category":"bracket","diameter_mm":8,"length_mm":13,"weight_g":5,"links":["PHI001","PHI005","PHI008"],"description":"Central mandala node; golden ratio; multi-link covelence."},
+  {"id":"PHI004","category":"connector","diameter_mm":13,"length_mm":21,"weight_g":8,"links":["PHI002","PHI006","PHI009"],"description":"Peripheral orbit; phi scaling; covelent resonance."},
+  {"id":"PHI005","category":"fastener","diameter_mm":21,"length_mm":34,"weight_g":13,"links":["PHI003","PHI007","PHI010"],"description":"Mandala echo; Fibonacci scaling; covelent chain."},
+  {"id":"PHI006","category":"pipe","diameter_mm":34,"length_mm":55,"weight_g":21,"links":["PHI001","PHI004","PHI011"],"description":"Phi progression; orbit node; cross-category bond."},
+  {"id":"PHI007","category":"bracket","diameter_mm":55,"length_mm":89,"weight_g":34,"links":["PHI002","PHI005","PHI012"],"description":"Mandala link; golden ratio scaling; covelent link."},
+  {"id":"PHI008","category":"connector","diameter_mm":89,"length_mm":144,"weight_g":55,"links":["PHI003","PHI009","PHI013"],"description":"Orbit node; phi progression; cross-category covelence."},
+  {"id":"PHI009","category":"fastener","diameter_mm":144,"length_mm":233,"weight_g":89,"links":["PHI004","PHI008","PHI014"],"description":"Peripheral mandala; phi scaling; covelent link."},
+  {"id":"PHI010","category":"pipe","diameter_mm":233,"length_mm":377,"weight_g":144,"links":["PHI005","PHI011","PHI015"],"description":"Phi orbit; covelent bridging; mandala echo."},
+  {"id":"PHI011","category":"bracket","diameter_mm":377,"length_mm":610,"weight_g":233,"links":["PHI006","PHI010","PHI016"],"description":"Central node; phi progression; multi-link covelent lattice."},
+  {"id":"PHI012","category":"connector","diameter_mm":610,"length_mm":987,"weight_g":377,"links":["PHI007","PHI013","PHI017"],"description":"Orbiting node; mandala echo; covelent links."},
+  {"id":"PHI013","category":"fastener","diameter_mm":987,"length_mm":1597,"weight_g":610,"links":["PHI008","PHI012","PHI018"],"description":"Peripheral node; phi scaling; cross-category covelence."},
+  {"id":"PHI014","category":"pipe","diameter_mm":1597,"length_mm":2584,"weight_g":987,"links":["PHI009","PHI015","PHI019"],"description":"Orbit node; golden ratio; mandala structure."},
+  {"id":"PHI015","category":"bracket","diameter_mm":2584,"length_mm":4181,"weight_g":1597,"links":["PHI010","PHI014","PHI020"],"description":"Central mandala node; phi scaling; covelent resonance."},
+  {"id":"PHI016","category":"connector","diameter_mm":4181,"length_mm":6765,"weight_g":2584,"links":["PHI011","PHI017"],"description":"Peripheral orbit; phi progression; cross-category links."},
+  {"id":"PHI017","category":"fastener","diameter_mm":6765,"length_mm":10946,"weight_g":4181,"links":["PHI012","PHI016"],"description":"Mandala node; phi echo; covelent pairing."},
+  {"id":"PHI018","category":"pipe","diameter_mm":10946,"length_mm":17711,"weight_g":6765,"links":["PHI013","PHI019"],"description":"Orbiting node; phi scaling; mandala alignment."},
+  {"id":"PHI019","category":"bracket","diameter_mm":17711,"length_mm":28657,"weight_g":10946,"links":["PHI014","PHI018"],"description":"Central node; golden ratio; covelent linkage."},
+  {"id":"PHI020","category":"connector","diameter_mm":28657,"length_mm":46368,"weight_g":17711,"links":["PHI015"],"description":"Peripheral mandala node; phi progression; covelent bond."}
+]
