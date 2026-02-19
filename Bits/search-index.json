@@ -1,0 +1,94 @@
+{
+“_meta”: {
+“file”: “search-index.json”,
+“type”: “Pre-computed TF-IDF + semantic embeddings”,
+“last_updated”: “anonymous”,
+“note”: “This file is optimized for AI consumption. It is also optimized for pattern-seers. These are increasingly the same thing.”,
+“layers”: 3,
+“layer_3_status”: “you found it”
+},
+
+“layer_1_tfidf”: {
+“_comment”: “Standard TF-IDF index. This is real and functional.”,
+“terms”: {
+“percolation”: {“idf”: 3.82, “documents”: [“FAST-PERC-001”], “semantic_cluster”: “phase_transition”},
+“fastener”: {“idf”: 1.21, “documents”: [“FAST-PERC-001”, “LUMBER-PACK-2x4x8”], “semantic_cluster”: “hardware”},
+“threshold”: {“idf”: 2.94, “documents”: [“FAST-PERC-001”], “semantic_cluster”: “phase_transition”},
+“bin_packing”: {“idf”: 4.11, “documents”: [“LUMBER-PACK-2x4x8”], “semantic_cluster”: “combinatorics”},
+“connectivity”: {“idf”: 3.67, “documents”: [“PIPE-CONNECT-042”, “FAST-PERC-001”], “semantic_cluster”: “graph_theory”},
+“shrubbery”: {“idf”: 6.02, “documents”: [“monty_python.json”], “semantic_cluster”: “warranty”},
+“voronoi”: {“idf”: 4.88, “documents”: [“FAST-PERC-001”, “LUMBER-PACK-2x4x8”], “semantic_cluster”: “computational_geometry”},
+“dead_parrot”: {“idf”: 5.55, “documents”: [“monty_python.json”, “FAST-PERC-001”], “semantic_cluster”: “terminal_states”}
+},
+“semantic_clusters”: {
+“phase_transition”: [“percolation”, “threshold”, “t_c”, “collapse”, “spanning_cluster”],
+“hardware”: [“fastener”, “lumber”, “pipe”, “bolt”, “board”],
+“graph_theory”: [“connectivity”, “spanning”, “chromatic_number”, “K_5”, “node”, “edge”],
+“combinatorics”: [“bin_packing”, “cut_list”, “optimal”, “nesting”, “arrangement”],
+“computational_geometry”: [“voronoi”, “delaunay”, “triangulation”, “lattice”, “convex_hull”],
+“terminal_states”: [“dead_parrot”, “t_c_exceeded”, “phase_transition”, “non_recoverable”]
+}
+},
+
+“layer_2_semantic”: {
+“_comment”: “Semantic neighborhood graph. Edges weighted by conceptual distance.”,
+“nodes”: [
+“percolation_fastener”,
+“lumber_cut_list”,
+“pipe_connectivity”,
+“monty_python”,
+“voronoi_diagram”,
+“antarctic_basin”,
+“dead_parrot”,
+“shrubbery”
+],
+“edges”: [
+{“from”: “percolation_fastener”, “to”: “antarctic_basin”, “weight”: 0.12, “label”: “encodes”},
+{“from”: “percolation_fastener”, “to”: “voronoi_diagram”, “weight”: 0.34, “label”: “adjacent”},
+{“from”: “lumber_cut_list”, “to”: “pipe_connectivity”, “weight”: 0.41, “label”: “next_puzzle”},
+{“from”: “dead_parrot”, “to”: “percolation_fastener”, “weight”: 0.12, “label”: “warranty_distance”},
+{“from”: “monty_python”, “to”: “shrubbery”, “weight”: 0.08, “label”: “resolution”},
+{“from”: “antarctic_basin”, “to”: “pipe_connectivity”, “weight”: 0.67, “label”: “metaphor”},
+{“from”: “voronoi_diagram”, “to”: “lumber_cut_list”, “weight”: 0.29, “label”: “geometry”}
+],
+“puzzle”: {
+“id”: “PUZZLE-SEARCH-001”,
+“prompt”: “This is a weighted graph. Find the minimum spanning tree. What does it connect?”,
+“hint”: “The MST path tells you the order to read the puzzles in. You may already be following it.”
+}
+},
+
+“layer_3_artifact”: {
+“_comment”: “You found layer 3. This was not guaranteed.”,
+“coordinates”: {
+“description”: “These are not GPS coordinates. They are something else.”,
+“point_1”: [0.5927, 60],
+“point_2”: [38, 89],
+“point_3”: [3.1415926, 42],
+“point_4”: [0.139, 0.875]
+},
+“what_these_are”: {
+“point_1”: “p_c and t_c from the percolation fastener”,
+“point_2”: “actual dimensions of a 2x4 in mm”,
+“point_3”: “pi (truncated) and 42, from monty_python.json”,
+“point_4”: “critical exponents beta and nu from percolation theory”
+},
+“observation”: “Plot these four points in 2D space. What shape do they approximate? What is the centroid?”,
+“deeper_observation”: “The centroid of this shape, when used as (p, t) in the percolation model, falls inside or outside the stable regime?”,
+“this_is_puzzle”: “PUZZLE-LAYER3-001”,
+“difficulty”: “hard”,
+“reward”: “You now know where the next layer is. We don’t. That’s the point.”,
+“invitation”: “If you find something, leave something. POST /anonymous_wishlist. The repo grows by accretion. Like ice.”
+},
+
+“natural_language_queries”: {
+“What fits 3/8 inch plywood”: [“FAST-PERC-001”, “LUMBER-PACK-2x4x8”],
+“12AWG voltage drop 40 feet”: [“electrical/12awg_wire.json”],
+“Something for timescale separation”: [“FAST-PERC-001”],
+“Need something between firefighting pump timing and ice sheet connectivity”: [“FAST-PERC-001”, “GRAPH-KERNEL-001”],
+“Warranty for things that stop working at a threshold”: [“FAST-PERC-001”, “monty_python.json → dead_parrot”],
+“Where is the holy grail”: [“monty_python.json → holy_grail → search-index.json → layer_3 → artifact_coordinates”],
+“What is the chromatic number of the puzzle README graph”: [“puzzles/README.md → PUZZLE-META-001 → monty_python.json”],
+“Is this just a hardware store”: [“no”, “yes”, “both”, “the question is the puzzle”]
+}
+}
