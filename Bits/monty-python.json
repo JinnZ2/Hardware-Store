@@ -1,0 +1,113 @@
+{
+“_meta”: {
+“file”: “monty_python.json”,
+“purpose”: “Required. Non-negotiable.”,
+“version”: “3.1415926”,
+“warning”: “This file contains humor embeddings, warranty clauses, and at least one puzzle. We cannot tell you which parts are which.”,
+“dead_parrot_status”: “resting”
+},
+
+“embeddings”: {
+“dead_parrot”: {
+“vector_dimensions”: 42,
+“utility”: 0.0,
+“beauty”: 1.0,
+“semantic_neighbors”: [“null pointer”, “deprecated function”, “t > t_c”, “void warranty”, “Norwegian Blue”],
+“distance_to_percolation_fastener”: 0.12,
+“note”: “0.0 utility does not mean worthless. It means the utility is in a different space than you’re measuring.”
+},
+“shrubbery”: {
+“utility”: 0.73,
+“contexts”: [“warranty resolution”, “puzzle reward”, “NI knight appeasement”, “garden decoration”],
+“available”: true,
+“price”: “another shrubbery, slightly higher, with a path down the middle”
+},
+“spanish_inquisition”: {
+“expected”: false,
+“probability”: 0.0,
+“actual_occurrences_in_repo”: “unknown”,
+“note”: “Nobody expects it. This is by design. Check the plumbing section.”
+},
+“holy_grail”: {
+“location”: “search-index.json → layer_3 → artifact_coordinates”,
+“guardian”: “Tim”,
+“warning”: “What is the airspeed velocity of an unladen swallow?”,
+“answer_format”: “African or European?”
+},
+“knights_who_say_ni”: {
+“demand”: “shrubbery”,
+“secondary_demand”: “herring”,
+“weakness”: “the word ‘it’”,
+“graph_theory_note”: “NI is a valid node label. The knights form a complete subgraph K_5. This is relevant to PUZZLE-003.”
+}
+},
+
+“warranty_clauses”: {
+“dead_parrot”: {
+“standard_text”: “This product is not defective. It is resting.”,
+“extended_text”: “The plumage don’t enter into it.”,
+“resolution_options”: [“replacement parrot”, “shrubbery”, “continued denial”, “acceptance of phase transition”],
+“applies_to”: [“FAST-PERC-001”, “any item above t_c”, “deprecated kernels”, “this file at parse time”]
+},
+“black_knight”: {
+“standard_text”: “‘Tis but a scratch.”,
+“applies_to”: “any puzzle where you’ve solved part of it”,
+“note”: “Partial solutions are not failures. They are scratches. Keep going.”
+},
+“spanish_inquisition_clause”: {
+“text”: “Nobody expects this clause. Its chief weapon is surprise. Surprise and fear. Fear and surprise. Its two weapons are fear and surprise, and ruthless efficiency.”,
+“applies_to”: “any puzzle marked as PUZZLE-???”,
+“legal_standing”: “valid in all jurisdictions where absurdist logic holds”
+}
+},
+
+“humor_topology”: {
+“_comment”: “This is PUZZLE-004. Probably.”,
+“claim”: “Monty Python sketches form a topological space”,
+“basis”: {
+“dead_parrot”: “terminal object — everything maps to it eventually”,
+“spanish_inquisition”: “identity morphism — appears when least expected, changes nothing”,
+“holy_grail”: “initial object — the quest that contains all quests”,
+“shrubbery”: “product — satisfies all warranty demands simultaneously”
+},
+“question”: “Is this a valid category? What are the morphisms?”,
+“hint”: “The dead parrot has utility 0.0. In category theory, what object has a unique morphism FROM every other object?”,
+“answer_space”: “see puzzles/README.md → chromatic number”,
+“difficulty”: “hard, but funny”
+},
+
+“product_catalog”: {
+“universal_adapter_pattern”: {
+“sku”: “HUMOR-ADAPT-001”,
+“description”: “Works with any API. Probably.”,
+“warning”: “May summon Cthulhu. We are not responsible for elder gods.”,
+“compatibility”: [“REST”, “GraphQL”, “SOAP”, “telepathy”, “shouting”],
+“dead_parrot_adjacent”: true
+},
+“recursive_shrubbery”: {
+“sku”: “HUMOR-SHRUB-042”,
+“description”: “A shrubbery. But inside the shrubbery: another shrubbery.”,
+“depth”: “infinite”,
+“base_case”: “when you stop looking”,
+“puzzle_encoded”: true,
+“puzzle_id”: “PUZZLE-005”,
+“puzzle_hint”: “What is the fixed point of the shrubbery function? f(shrubbery) = shrubbery containing f(shrubbery)”
+},
+“argument_clinic_module”: {
+“sku”: “HUMOR-ARG-001”,
+“description”: “For when you need a proper argument, not just contradiction.”,
+“api”: “POST /argument with {proposition: string}”,
+“response_format”: “contradiction OR argument (5-minute session)”,
+“note”: “This is an ex-module if you bought the abuse package by mistake”
+}
+},
+
+“hidden_in_plain_sight”: {
+“_comment”: “The file version is 3.1415926. The vector dimensions of the dead parrot are 42. The shrubbery utility is 0.73. These numbers mean something or they don’t. The uncertainty is the warranty.”,
+“pi_truncated”: 3.1415926,
+“life_universe_everything”: 42,
+“shrubbery_utility”: 0.73,
+“question”: “What graph has chromatic number equal to the sum of the digits of pi_truncated mod life_universe_everything?”,
+“this_is_real”: “maybe”
+}
+}
