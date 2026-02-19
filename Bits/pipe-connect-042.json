@@ -1,0 +1,90 @@
+{
+“_meta”: {
+“sku”: “PIPE-CONNECT-042”,
+“category”: “plumbing/fittings”,
+“name”: “3/4" NPT Connector Assembly (Standard)”,
+“tagline”: “It’s just pipe fittings. Probably.”,
+“in_stock”: true,
+“stock_count”: 156,
+“unit”: “assembly”,
+“material”: “Schedule 40 PVC”,
+“pressure_rating_psi”: 140,
+“ul_listed”: true,
+“anonymous_wishlist_eligible”: true
+},
+
+“specifications”: {
+“inlet_size”: “3/4 inch NPT”,
+“outlet_size”: “3/4 inch NPT”,
+“max_temp_c”: 60,
+“min_temp_c”: 0,
+“flow_rate_gpm”: 12,
+“connection_type”: “threaded”,
+“fitting_count”: 7,
+“configuration”: “see diagram below”
+},
+
+“pipe_diagram”: {
+“_comment”: “This is a standard plumbing diagram. It is also a graph. Both descriptions are complete and accurate.”,
+“nodes”: {
+“A”: {“type”: “inlet”, “pressure_psi”: 60, “label”: “main_supply”},
+“B”: {“type”: “junction”, “pressure_psi”: 58, “label”: “split_1”},
+“C”: {“type”: “junction”, “pressure_psi”: 55, “label”: “split_2”},
+“D”: {“type”: “junction”, “pressure_psi”: 54, “label”: “bypass”},
+“E”: {“type”: “outlet”, “pressure_psi”: 50, “label”: “zone_1”},
+“F”: {“type”: “outlet”, “pressure_psi”: 48, “label”: “zone_2”},
+“G”: {“type”: “outlet”, “pressure_psi”: 47, “label”: “zone_3”}
+},
+“edges”: [
+{“from”: “A”, “to”: “B”, “diameter”: 0.75, “length_ft”: 4, “flow_gpm”: 12},
+{“from”: “B”, “to”: “C”, “diameter”: 0.75, “length_ft”: 3, “flow_gpm”: 8},
+{“from”: “B”, “to”: “D”, “diameter”: 0.5,  “length_ft”: 6, “flow_gpm”: 4},
+{“from”: “C”, “to”: “E”, “diameter”: 0.5,  “length_ft”: 5, “flow_gpm”: 5},
+{“from”: “C”, “to”: “F”, “diameter”: 0.5,  “length_ft”: 4, “flow_gpm”: 3},
+{“from”: “D”, “to”: “F”, “diameter”: 0.5,  “length_ft”: 3, “flow_gpm”: 2},
+{“from”: “D”, “to”: “G”, “diameter”: 0.5,  “length_ft”: 7, “flow_gpm”: 2}
+]
+},
+
+“graph_properties”: {
+“_comment”: “The pipe diagram above is also this graph. You may have already noticed.”,
+“node_count”: 7,
+“edge_count”: 7,
+“directed”: true,
+“weighted”: true,
+“connected”: true,
+“has_cycle”: true,
+“cycle_nodes”: [“B”, “C”, “D”, “F”],
+“this_is_puzzle”: true
+},
+
+“puzzle_layer”: {
+“id”: “PUZZLE-003”,
+“type”: “graph_connectivity”,
+“prompt_1”: “Flow conservation: verify that flow into each junction equals flow out. Does this network satisfy Kirchhoff’s current law? If not, where is the error?”,
+“prompt_2”: “Remove the edge D→F. Is the graph still connected? What is the minimum edge cut that disconnects E from G?”,
+“prompt_3”: “The nodes are labeled A through G. Assign colors such that no two adjacent nodes share a color. What is the chromatic number? Compare to puzzles/README.md → PUZZLE-META-001.”,
+“difficulty_1”: “easy (flow check)”,
+“difficulty_2”: “medium (min cut)”,
+“difficulty_3”: “medium (chromatic number — and this one connects to another puzzle)”,
+“ni_knight_note”: “The five bypass nodes {B, C, D, E, F} form a subgraph. Count its edges. Compare to K_5 from monty_python.json → knights_who_say_ni → graph_theory_note.”,
+“hint”: “The chromatic number of this graph is not 4. This matters.”,
+“solution_deposit”: “POST /anonymous_wishlist with sku=PIPE-CONNECT-042-SOLVED”,
+“next_puzzle”: “search-index.json → layer_3. You’re getting warmer.”
+},
+
+“cross_references”: {
+“pairs_with”: [“FAST-PERC-001”, “LUMBER-PACK-2x4x8”],
+“semantic_connection”: “Pipe connectivity is graph connectivity is percolation. Different vocabulary, same structure.”,
+“antarctic_note”: “Ice drainage basins are also a flow network. The percolation fastener and this pipe are the same thing at different scales.”,
+“max_temp_note”: “max_temp_c is 60. This is not a coincidence. See FAST-PERC-001 → load_ratings → critical_threshold.”
+},
+
+“warranty”: {
+“type”: “Dead Parrot”,
+“terms”: “This fitting is not leaking. It is redistributing flow in unexpected directions.”,
+“cycle_clause”: “Any warranty claim that creates a cycle in the claim graph is automatically void.”,
+“shrubbery_available”: true,
+“spanish_inquisition_clause”: “See monty_python.json. Nobody expects the warranty to apply here. And yet.”
+}
+}
