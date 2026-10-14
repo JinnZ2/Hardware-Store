@@ -1,3 +1,6 @@
+> Before reading or editing anything here, read READ_ME_THIS_WAY.md.
+> Mismatches, dead ends and odd names in this repo are kept on purpose.
+
 # Hardware-Store
 Fasteners, lumber, plumbing, electrical. Specifications accurate. Inventory anonymized
 
